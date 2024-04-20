@@ -1,6 +1,7 @@
 """Implementação da busca em profundidade."""
 from typing import List
-from src.graph import Graph, Edge
+from src.graph import Graph, Edge, Node
+from src.util import haversine
 
 
 def dfs(graph: Graph, start: int, goal: int):
@@ -15,7 +16,9 @@ def dfs(graph: Graph, start: int, goal: int):
     while stack:
         number_graph_nodes_analyzed += 1
         if stack[-1][-1] == goal:
-            return number_graph_nodes_analyzed, 0, stack[-1]
+            teste = get_length_path(graph.NodeList, stack[-1])
+            print(teste)
+            """return number_graph_nodes_analyzed, teste, stack[-1]"""
         else:
             node = stack.pop()
             stack.extend(find_neighbor(node, graph.EdgeList))
@@ -46,10 +49,18 @@ def set_is_visited(edge_list: List[Edge], starting_node: int, ending_node: int):
         edge.set_is_visited()
 
 
-def get_length_path(edge_list: List[Edge], path: List[int]):
+def get_length_path(node_list: List[Node], path: List[int]):
     length_path: float = 0
-    for node in path:
-        pass
+    for i in range(len(path)):
+        latitude1, longitude1 = get_lat_long(node_list, path[i])
+        latitude2, longitude2 = get_lat_long(node_list, path[i + 1])
+        length_path += haversine(latitude1, longitude1, latitude2, longitude2)
+    return length_path
 
 
-    """Busca um caminho entre start e goal usando busca em profundidade."""
+def get_lat_long(node_list: List[Node], node: int):
+    node: Node = filter(lambda e: node == e.Node, node_list)[0]
+    return node.Latitude, node.Longitude
+
+
+"""Busca um caminho entre start e goal usando busca em profundidade"""
