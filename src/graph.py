@@ -1,4 +1,5 @@
 """Implementação de uma estrutura de grafo."""
+from typing import List
 
 
 class Graph:
