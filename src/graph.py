@@ -1,4 +1,5 @@
 """Implementação de uma estrutura de grafo."""
+
 from typing import List
 
 
@@ -22,8 +23,8 @@ class Edge:
         self.Cost: float = cost
         self.IsVisited: bool = False
 
-    def set_is_visited(self):
-        self.IsVisited = True
+    def set_is_visited(self, is_visited: bool):
+        self.IsVisited = is_visited
 
     def get_is_visited(self):
         return self.IsVisited
@@ -42,3 +43,4 @@ def read_graph(filename: str):
             from_vertex, to_vertex, cost = input_file.readline().strip().split()
             graph.EdgeList.append(Edge(int(from_vertex), int(to_vertex), float(cost)))
     return graph
+
