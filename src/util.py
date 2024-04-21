@@ -27,7 +27,7 @@ def haversine(lat1, lon1, lat2, lon2):
 # Não altere este comentário e adicione suas funções ao final do arquivo.
 #
 
-def find_neighbor(node_list: List[int], edge_list: List[Edge], goal: int):
+def find_neighbor(node_list: List[int], edge_list: List[Edge], goal: int) -> List[List[int]]:
     node_to_analyzed: int = node_list[-1]
     new_list: List[List[int]] = []
     for edge in edge_list:
@@ -49,19 +49,19 @@ def find_neighbor(node_list: List[int], edge_list: List[Edge], goal: int):
     return new_list
 
 
-def new_item_of_list(node_list: List[int], new_node: int):
+def new_item_of_list(node_list: List[int], new_node: int) -> List[int]:
     node_list.append(new_node)
     return node_list
 
 
-def set_is_visited(edge_list: List[Edge], starting_node: int, ending_node: int):
+def set_is_visited(edge_list: List[Edge], starting_node: int, ending_node: int) -> None:
     edges_to_visit: List[Edge] = list(filter(lambda e: (starting_node == e.Node1 or starting_node == e.Node2) and
                                                        (ending_node == e.Node1 or ending_node == e.Node2), edge_list))
     for edge in edges_to_visit:
         edge.set_is_visited(True)
 
 
-def get_length_path(node_list: List[Node], path: List[int]):
+def get_length_path(node_list: List[Node], path: List[int]) -> float:
     length_path: float = 0
     for index in range(len(path) - 1):
         latitude1, longitude1 = get_lat_long(node_list, path[index])
@@ -70,7 +70,7 @@ def get_length_path(node_list: List[Node], path: List[int]):
     return length_path
 
 
-def get_lat_long(node_list: List[Node], node: int):
+def get_lat_long(node_list: List[Node], node: int) -> (float, float):
     node: Node = list(filter(lambda e: node == e.Node, node_list))[0]
     return node.Latitude, node.Longitude
 
