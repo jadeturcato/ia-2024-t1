@@ -31,21 +31,14 @@ def find_neighbor(node_list: List[int], edge_list: List[Edge], goal: int) -> Lis
     node_to_analyzed: int = node_list[-1]
     new_list: List[List[int]] = []
     for edge in edge_list:
-        if not edge.get_is_visited():
-            if node_to_analyzed == edge.Node1:
-                if goal == edge.Node2:
-                    new_list.append(new_item_of_list(node_list.copy(), edge.Node2))
-                    set_is_visited(edge_list, node_to_analyzed, edge.Node2)
-                    return new_list
-                new_list.append(new_item_of_list(node_list.copy(), edge.Node2))
-                set_is_visited(edge_list, node_to_analyzed, edge.Node2)
-            elif node_to_analyzed == edge.Node2:
-                if goal == edge.Node1:
-                    new_list.append(new_item_of_list(node_list.copy(), edge.Node1))
-                    set_is_visited(edge_list, node_to_analyzed, edge.Node1)
-                    return new_list
-                new_list.append(new_item_of_list(node_list.copy(), edge.Node1))
-                set_is_visited(edge_list, node_to_analyzed, edge.Node1)
+        if not edge.get_is_visited() and (node_to_analyzed == edge.Node1 or node_to_analyzed == edge.Node2):
+            node_to_append: int = edge.Node1 if node_to_analyzed == edge.Node2 else edge.Node2
+            if goal == node_to_append:
+                new_list.append(new_item_of_list(node_list.copy(), node_to_append))
+                set_is_visited(edge_list, node_to_analyzed, node_to_append)
+                return new_list
+            new_list.append(new_item_of_list(node_list.copy(), node_to_append))
+            set_is_visited(edge_list, node_to_analyzed, node_to_append)
     return new_list
 
 
