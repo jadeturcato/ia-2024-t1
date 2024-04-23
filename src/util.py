@@ -37,8 +37,9 @@ def find_neighbor(node_list: List[int], edge_list: List[Edge], goal: int) -> Lis
                 new_list.append(new_item_of_list(node_list.copy(), node_to_append))
                 set_is_visited(edge_list, node_to_analyzed, node_to_append)
                 return new_list
-            new_list.append(new_item_of_list(node_list.copy(), node_to_append))
-            set_is_visited(edge_list, node_to_analyzed, node_to_append)
+            else:
+                new_list.append(new_item_of_list(node_list.copy(), node_to_append))
+                set_is_visited(edge_list, node_to_analyzed, node_to_append)
     return new_list
 
 
