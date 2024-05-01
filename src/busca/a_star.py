@@ -6,7 +6,7 @@ def a_star(graph, start, goal):
     cost_so_far = {start: 0}
 
     while frontier:
-        frontier.sort()  )
+        frontier.sort()  
         _, current = frontier.pop(0)  
 
         if current == goal:
