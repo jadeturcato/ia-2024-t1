@@ -1,9 +1,9 @@
 """Implementação do algoritmo 'branch and bound'."""
 
-from typing import List, Dict
+from typing import List
 
-from src.graph import Vertex, AdjacentVertex
-from src.util import set_is_visited, get_length_path
+from graph import Vertex, AdjacentVertex
+from util import get_length_path
 
 
 def branch_and_bound(graph: List[Vertex], start: int, goal: int) -> (int, float, [int]):
@@ -14,8 +14,7 @@ def branch_and_bound(graph: List[Vertex], start: int, goal: int) -> (int, float,
 
     while len(queue) > 0:
         vertex_list_to_analyze = queue.pop(0)
-        adjacent_vertex_list: List[AdjacentVertex] = next(
-            filter(lambda e: e.Vertex == vertex_list_to_analyze[0][-1], graph), None).AdjacentVertexList
+        adjacent_vertex_list: List[AdjacentVertex] = next(filter(lambda e: e.Vertex == vertex_list_to_analyze[0][-1], graph), None).AdjacentVertexList
         new_items_of_queue = find_neighbor(adjacent_vertex_list, vertex_list_to_analyze, best_so_far)
 
         for index, (path, cost) in enumerate(new_items_of_queue):
@@ -50,4 +49,4 @@ def new_item_of_list(node_list: List[int], cost: float, new_vertex: AdjacentVert
         return []
 
 
-    """Busca um caminho entre start e goal usando Branch and Bound."""
+"""Busca um caminho entre start e goal usando Branch and Bound."""
