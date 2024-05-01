@@ -27,17 +27,17 @@ def haversine(lat1, lon1, lat2, lon2):
 # Não altere este comentário e adicione suas funções ao final do arquivo.
 #
 
-def find_neighbor(node_list: List[int], adjacent_vertex_list: List[AdjacentVertex], goal: int) -> List[List[int]]:
+def find_neighbor(graph: List[Vertex], node_list: List[int], adjacent_vertex_list: List[AdjacentVertex], goal: int) -> List[List[int]]:
     new_list: List[List[int]] = []
     for vertex in adjacent_vertex_list:
         if not vertex.get_is_visited():
             if goal == vertex.Vertex:
                 new_list.append(new_item_of_list(node_list.copy(), vertex.Vertex))
-                vertex.set_is_visited(True)
+                set_is_visited(graph, node_list[-1], vertex.Vertex)
                 return new_list
             else:
                 new_list.append(new_item_of_list(node_list.copy(), vertex.Vertex))
-                vertex.set_is_visited(True)
+                set_is_visited(graph, node_list[-1], vertex.Vertex)
     return new_list
 
 
@@ -63,6 +63,19 @@ def get_lat_long(graph: List[Vertex], vertex: int) -> (float, float):
 def check_vertex_in_graph(graph: List[Vertex], vertex: int) -> bool:
     find_vertex = next(filter(lambda e: vertex == e.Vertex, graph), None)
     return find_vertex is None
+
+
+def set_is_visited(graph: List[Vertex], vertex1: int, vertex2: int) -> None:
+    vertex_1: Vertex = next(filter(lambda e: e.Vertex == vertex1, graph))
+    vertex_2: Vertex = next(filter(lambda e: e.Vertex == vertex2, graph))
+
+    for vertex in vertex_1.AdjacentVertexList:
+        if vertex.Vertex == vertex_2.Vertex:
+            vertex.set_is_visited(True)
+
+    for vertex in vertex_2.AdjacentVertexList:
+        if vertex.Vertex == vertex_1.Vertex:
+            vertex.set_is_visited(True)
 
 
 def reset_is_visited(graph: List[Vertex]) -> None:
