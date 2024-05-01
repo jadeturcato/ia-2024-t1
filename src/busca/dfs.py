@@ -1,6 +1,8 @@
 """Implementação da busca em profundidade."""
 
-from src.util import *
+from typing import List
+from util import *
+from graph import Vertex
 
 
 def dfs(graph: List[Vertex], start: int, goal: int) -> (int, float, [int]):
@@ -11,16 +13,15 @@ def dfs(graph: List[Vertex], start: int, goal: int) -> (int, float, [int]):
     stack: List[List[int]] = [[start]]
 
     while stack:
-        number_graph_nodes_analyzed += 1
         if stack[-1][-1] == goal:
             path_between_start_and_goal = stack[-1]
             length_found_path = get_length_path(graph, path_between_start_and_goal)
             return number_graph_nodes_analyzed, length_found_path, path_between_start_and_goal
         else:
             node_list = stack.pop()
-            adjacent_vertex_list: List[AdjacentVertex] = next(filter(lambda e: e.Vertex == node_list[-1], graph),
-                                                              None).AdjacentVertexList
-            stack.extend(find_neighbor(node_list, adjacent_vertex_list, goal))
+            number_graph_nodes_analyzed += 1
+            adjacent_vertex_list: List[AdjacentVertex] = next(filter(lambda e: e.Vertex == node_list[-1], graph), None).AdjacentVertexList
+            stack.extend(find_neighbor(graph, node_list, adjacent_vertex_list, goal))
 
     raise Exception(f"É impossível encontrar um caminho entre {start} e {goal}")
 
