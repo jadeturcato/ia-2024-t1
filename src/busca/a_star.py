@@ -1,45 +1,37 @@
-from typing import Dict, List, Tuple
+from typing import List, Dict
 
-def a_star(graph: Dict[int, List[int]], start: int, goal: int) -> Tuple[int, float, List[int]]:
+def a_star(graph, start, goal):
+    frontier = [(0, start)]  
+    came_from = {start: None}
+    cost_so_far = {start: 0}
 
-     def reconstruct_path(cameFrom, current):
-         total_path = [current]
-         while current in cameFrom:
-            current = cameFrom[current]
-            total_path.insert(0, current)
-         return total_path
+    while frontier:
+        frontier.sort()  )
+        _, current = frontier.pop(0)  
 
+        if current == goal:
+            path = reconstruct_path(came_from, start, goal)
+            return len(came_from), cost_so_far[goal], path
 
-def a_star(start, goal, neighbors, distance, h):
-    openSet = {start}
-    cameFrom = {}
-    gScore = {node: float('inf') for node in neighbors.keys()}
-    gScore[start] = 0
-    fScore = {node: float('inf') for node in neighbors.keys()}
-    fScore[start] = h(start)
-    analyzed_nodes = 0
+        for next_node in graph.neighbors(current):
+            new_cost = cost_so_far[current] + graph.cost(current, next_node)
+            if next_node not in cost_so_far or new_cost < cost_so_far[next_node]:
+                cost_so_far[next_node] = new_cost
+                priority = new_cost + manhattan(goal, next_node)
+                frontier.append((priority, next_node))  
+                came_from[next_node] = current
 
-    while openSet:
-      analyzed_nodes  += 1
-      current = None
-      min_fScore = float('inf')
-      for node in openSet:
-          if fScore[node] < min_fScore:
-              min_fScore = fScore[node]
-              current = node
-            
-      if current == goal:
-          path = reconstruct_path(cameFrom, current)
-          return analyzed_nodes , gScore [goal], path
+    return None
 
-      openSet.remove(current)
-      for neighbor in neighbors[current]:        
-          tentative_gScore = gScore[current] + distance(current, neighbor)
-          if tentative_gScore < gScore[neighbor]:               
-              cameFrom[neighbor] = current
-              gScore[neighbor] = tentative_gScore
-              fScore[neighbor] = tentative_gScore + h(neighbor)
-              if neighbor not in openSet:
-                  openSet.add(neighbor)
+def reconstruct_path(came_from, start, goal):
+    current = goal
+    path = [current]
+    while current != start:
+        current = came_from[current]
+        path.append(current)
+    path.reverse()
+    return path
 
-    return analyzed_nodes, float('inf'), None
+def manhattan(a, b):
+    return abs(a.lat - b.lat) + abs(a.lon - b.lon)
+       
