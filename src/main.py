@@ -1,15 +1,13 @@
 """Utilize este arquivo para depurar seus algoritmos."""
 
 from typing import List
-from busca import a_star, dijkstra
 from graph import read_graph, Vertex
-from busca import dfs, bfs
-from busca import branch_and_bound
+from busca import dfs, bfs, branch_and_bound, a_star, dijkstra
 from util import reset_is_visited
 # from util import reset_is_visited
 
 if __name__ == "__main__":
-    graph: List[Vertex] = read_graph("mapas/mini_map.txt")
+    graph: List[Vertex] = read_graph("../mapas/mini_map.txt")
 
     # region DIJKSTRA
     number_graph_nodes_analyzed, length_found_path, path_between_start_and_goal = dijkstra(graph, 0, 6)
