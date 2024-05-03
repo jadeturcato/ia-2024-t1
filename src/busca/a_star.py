@@ -1,37 +1,39 @@
 """Implementação do algoritmo A*."""
 
+def a_star(graph: List[Vertex], start: int, goal: int) -> Tuple[int, float, List[int]]:
+open_set = {start}
+closed_set = set()
+came_from = {}
+g_score = {vertex.Vertex: float('inf') for vertex in graph}
+g_score[start] = 0
+f_score = {vertex.Vertex: float('inf') for vertex in graph}
+f_score[start] = manhattan_distance((graph[start].Coordinate.Latitude, graph[start].Coordinate.Longitude),
+                                    (graph[goal].Coordinate.Latitude, graph[goal].Coordinate.Longitude))
 
-def a_star(graph, start, goal):
-    frontier = [(0, start)]  
-    came_from = {start: None}
-    cost_so_far = {start: 0}
+while open_set:
+    current = min(open_set, key=lambda v: f_score[v])
+    if current == goal:
+        path = []
+        while current in came_from:
+            path.insert(0, current)
+            current = came_from[current]
+        return len(closed_set), g_score[goal], [start] + path
 
-    while frontier:
-        frontier.sort()  
-        _, current = frontier.pop(0)  
+    open_set.remove(current)
+    closed_set.add(current)
 
-        if current == goal:
-            path = reconstruct_path(came_from, start, goal)
-            return len(came_from), cost_so_far[goal], path
+    for neighbor in graph[current].AdjacentVertexList:
+        if neighbor.Vertex in closed_set:
+            continue
 
-        for next_node in graph.neighbors(current):
-            new_cost = cost_so_far[current] + graph.cost(current, next_node)
-            if next_node not in cost_so_far or new_cost < cost_so_far[next_node]:
-                cost_so_far[next_node] = new_cost
-                priority = new_cost + manhattan(goal, next_node)
-                frontier.append((priority, next_node))  
-                came_from[next_node] = current
+        tentative_g_score = g_score[current] + neighbor.Cost
+        if tentative_g_score < g_score[neighbor.Vertex]:
+            came_from[neighbor.Vertex] = current
+            g_score[neighbor.Vertex] = tentative_g_score
+            f_score[neighbor.Vertex] = tentative_g_score + manhattan_distance(
+                (graph[neighbor.Vertex].Coordinate.Latitude, graph[neighbor.Vertex].Coordinate.Longitude),
+                (graph[goal].Coordinate.Latitude, graph[goal].Coordinate.Longitude))
+            if neighbor.Vertex not in open_set:
+                open_set.add(neighbor.Vertex)
 
-    return None
-
-def reconstruct_path(came_from, start, goal):
-    current = goal
-    path = [current]
-    while current != start:
-        current = came_from[current]
-        path.append(current)
-    path.reverse()
-    return path
-
-def manhattan(a, b):
-    return abs(a.lat - b.lat) + abs(a.lon - b.lon)
+return 0, float('inf'), []
